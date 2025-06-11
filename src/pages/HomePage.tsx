@@ -75,7 +75,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center gap-10 px-4 py-8 md:px-6 lg:px-8">
 <h1 className="font-orbitron text-4xl text-neonMagenta drop-shadow-neonPink text-center">
-  🃏 Poker&nbsp;Settle
+  🃏 Chip Solver
 </h1>
 
       <motion.div
