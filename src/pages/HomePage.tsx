@@ -57,8 +57,6 @@ export default function HomePage() {
   };
 
   const backToPlay = () => {
-    setCash(Object.fromEntries(players.map(p => [p.id, ''])));
-
     setValidateOK(false);
     setResult(null);
     setError(null);
