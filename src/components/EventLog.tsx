@@ -26,6 +26,7 @@ export default function EventLog({ phase }: { phase: 'play' | 'settle' | 'done' 
                 — {nameOf(e.playerId)} buy&nbsp;<strong>{e.amount}</strong>
               </span>
               <button
+                aria-label="Undo event"
                 disabled={phase !== 'play'}
                 onClick={() => {
                   if (phase !== 'play') return;

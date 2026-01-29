@@ -44,6 +44,9 @@ export default function BuyInModal({
         >
           <motion.div
             key="buyin-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="buyin-modal-title"
             initial={{ opacity: 0, scale: 0.9, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 12 }}
@@ -51,7 +54,10 @@ export default function BuyInModal({
             className="card mx-4 w-full max-w-xs p-6 flex flex-col gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="font-orbitron text-sm text-neonPink uppercase tracking-wider">
+            <h3
+              id="buyin-modal-title"
+              className="font-orbitron text-sm text-neonPink uppercase tracking-wider"
+            >
               Buy-in Amount
             </h3>
 

@@ -19,6 +19,7 @@ export default function BuyButton({
   return (
     <>
       <motion.button
+        aria-label="Buy in"
         whileTap={!disabled ? { scale: 0.94 } : undefined}
         disabled={disabled}
         onClick={() => {
