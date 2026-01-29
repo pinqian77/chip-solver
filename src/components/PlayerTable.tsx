@@ -56,27 +56,27 @@ export default function PlayerTable({ phase, cash, setCash, onEdit, defaultBuyIn
 
       {/* table */}
       <div className="overflow-x-auto">
-        <table className="table-fixed w-full min-w-[520px] whitespace-nowrap text-center">
+        <table className="table-fixed w-full whitespace-nowrap text-center text-sm sm:text-base">
           <colgroup>
-            <col style={{ width: '30%' }} />
-            <col style={{ width: '15%' }} />
-            <col style={{ width: '25%' }} />
-            <col style={{ width: '30%' }} />
+            <col className="w-[28%] sm:w-[30%]" />
+            <col className="w-[14%] sm:w-[15%]" />
+            <col className="w-[26%] sm:w-[25%]" />
+            <col className="w-[32%] sm:w-[30%]" />
           </colgroup>
           <thead>
             <tr className="table-head">
-              <th className="px-4 py-2">Player</th>
-              <th className="px-4 py-2">Buy-in</th>
-              <th className="px-4 py-2">Final Chip</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className="px-2 py-2 sm:px-4">Player</th>
+              <th className="px-1 py-2 sm:px-4">Buy-in</th>
+              <th className="px-1 py-2 sm:px-4">Final Chip</th>
+              <th className="px-1 py-2 sm:px-4">Actions</th>
             </tr>
           </thead>
           <tbody>
             {players.map(p => (
               <tr key={p.id} className="border-b border-white/10">
-                <td className="py-2 px-4">{p.name}</td>
-                <td className="py-2 px-4">{totalBuy[p.id]}</td>
-                <td className="py-2 px-4">
+                <td className="py-2 px-2 sm:px-4 truncate max-w-0">{p.name}</td>
+                <td className="py-2 px-1 sm:px-4">{totalBuy[p.id]}</td>
+                <td className="py-2 px-1 sm:px-4">
                   <input
                     type="number"
                     value={cash[p.id]}
@@ -92,21 +92,23 @@ export default function PlayerTable({ phase, cash, setCash, onEdit, defaultBuyIn
                     )}
                   />
                 </td>
-                <td className="py-2 px-4 flex items-center justify-center gap-2">
-                  <BuyButton playerId={p.id} disabled={phase !== 'play'} defaultAmount={defaultBuyIn} />
-                  <button
-                    disabled={phase !== 'play'}
-                    onClick={() =>
-                      phase === 'play' &&
-                      dispatch({ type: 'removePlayer', id: p.id })
-                    }
-                    className={clsx(
-                      'text-xs text-neonPink hover:underline',
-                      phase !== 'play' && 'cursor-not-allowed opacity-40',
-                    )}
-                  >
-                    Delete
-                  </button>
+                <td className="py-2 px-1 sm:px-4">
+                  <div className="flex items-center justify-center gap-1 sm:gap-2">
+                    <BuyButton playerId={p.id} disabled={phase !== 'play'} defaultAmount={defaultBuyIn} />
+                    <button
+                      disabled={phase !== 'play'}
+                      onClick={() =>
+                        phase === 'play' &&
+                        dispatch({ type: 'removePlayer', id: p.id })
+                      }
+                      className={clsx(
+                        'min-w-[32px] min-h-[32px] inline-flex items-center justify-center rounded text-xs text-neonPink hover:bg-white/10 transition-colors',
+                        phase !== 'play' && 'cursor-not-allowed opacity-40',
+                      )}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

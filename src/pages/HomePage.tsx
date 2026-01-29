@@ -125,8 +125,7 @@ export default function HomePage() {
         <motion.section
           layout
           ref={tableRef}
-          className="card p-6 flex flex-col gap-6 order-2"
-          style={{ gridColumn: 'span 2' }}
+          className="card p-6 flex flex-col gap-6 order-2 md:col-span-2"
         >
           {phase === 'play' && (
             <div className="flex items-center gap-3">
