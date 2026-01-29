@@ -34,7 +34,7 @@ export default function HomePage() {
   const tableRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (tableRef.current) setCenterHeight(tableRef.current.offsetHeight);
-  });
+  }, [players, events, phase, validateOK, result, error]);
 
   /* -------- derived totals -------- */
   const totalBuy = events.reduce((s, e) => s + e.amount, 0);
