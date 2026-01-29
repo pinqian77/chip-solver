@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Calculator, ArrowLeft, RotateCcw } from 'lucide-react';
+import { Check, Calculator, ArrowLeft, RotateCcw, Copy } from 'lucide-react';
 import PlayerTable from '../components/PlayerTable';
 import EventLog from '../components/EventLog';
 import { useGame } from '../context/GameContext';
@@ -29,6 +29,7 @@ export default function HomePage() {
   const [validateOK, setValidateOK] = useState(false);
   const [result, setResult] = useState<ReturnType<typeof settle> | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   /* -------- center height sync -------- */
   const [centerHeight, setCenterHeight] = useState<number>(0);
@@ -92,6 +93,27 @@ export default function HomePage() {
     );
     setResult(res);
     setPhase('done');
+  };
+
+  const copyResults = () => {
+    if (!result) return;
+    const netLines = players
+      .map(p => `  ${p.name}: ${result.net[p.id] > 0 ? '+' : ''}${result.net[p.id]}`)
+      .join('\n');
+    const transferLines =
+      result.list.length === 0
+        ? '  No transfer needed'
+        : result.list
+            .map(
+              t =>
+                `  ${players.find(p => p.id === t.from)!.name} → ${players.find(p => p.id === t.to)!.name}: ${t.amount}`,
+            )
+            .join('\n');
+    const text = `🃏 Chip Solver Results\n\n📊 Net:\n${netLines}\n\n💸 Transfers:\n${transferLines}`;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   /* -------- layout -------- */
@@ -229,6 +251,13 @@ export default function HomePage() {
                   ))}
                 </ul>
               )}
+              <button
+                className="btn-neon mt-6 flex items-center gap-2"
+                onClick={copyResults}
+              >
+                <Copy size={16} />
+                {copied ? 'Copied!' : 'Copy Results'}
+              </button>
             </motion.aside>
           )}
         </AnimatePresence>
