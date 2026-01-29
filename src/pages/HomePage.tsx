@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Calculator, ArrowLeft } from 'lucide-react';
 import PlayerTable from '../components/PlayerTable';
@@ -14,6 +14,17 @@ export default function HomePage() {
   const [cash, setCash] = useState<Record<string, string>>(
     () => Object.fromEntries(players.map(p => [p.id, ''])),
   );
+  /* -------- sync cash keys with players -------- */
+  useEffect(() => {
+    setCash(prev => {
+      const next: Record<string, string> = {};
+      players.forEach(p => {
+        next[p.id] = prev[p.id] ?? '';
+      });
+      return next;
+    });
+  }, [players]);
+
   const [validateOK, setValidateOK] = useState(false);
   const [result, setResult] = useState<ReturnType<typeof settle> | null>(null);
   const [error, setError] = useState<string | null>(null);
