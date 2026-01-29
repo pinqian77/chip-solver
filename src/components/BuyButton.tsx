@@ -5,9 +5,11 @@ import clsx from 'clsx';
 export default function BuyButton({
   playerId,
   disabled,
+  defaultAmount = 0,
 }: {
   playerId: string;
   disabled?: boolean;
+  defaultAmount?: number;
 }) {
   const { dispatch } = useGame();
 
@@ -17,7 +19,8 @@ export default function BuyButton({
       disabled={disabled}
       onClick={() => {
         if (disabled) return;
-        const amt = parseInt(prompt('Buy-in amount?') || '', 10);
+        const prefill = defaultAmount > 0 ? String(defaultAmount) : '';
+        const amt = parseInt(prompt('Buy-in amount?', prefill) || '', 10);
         if (Number.isFinite(amt) && amt > 0)
           dispatch({ type: 'buyin', playerId, amount: amt });
       }}

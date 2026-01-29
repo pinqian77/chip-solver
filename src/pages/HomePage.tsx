@@ -10,6 +10,7 @@ import NeonButton from '../components/NeonButton';
 export default function HomePage() {
   /* -------- state -------- */
   const [phase, setPhase] = useState<'play' | 'settle' | 'done'>('play');
+  const [defaultBuyIn, setDefaultBuyIn] = useState(0);
   const { players, events } = useGame();
   const [cash, setCash] = useState<Record<string, string>>(
     () => Object.fromEntries(players.map(p => [p.id, ''])),
@@ -113,11 +114,32 @@ export default function HomePage() {
           className="card p-6 flex flex-col gap-6 order-2"
           style={{ gridColumn: 'span 2' }}
         >
+          {phase === 'play' && (
+            <div className="flex items-center gap-3">
+              <label
+                htmlFor="default-buyin"
+                className="text-xs font-semibold uppercase tracking-wider text-neonPink"
+              >
+                Default Buy-in
+              </label>
+              <input
+                id="default-buyin"
+                type="number"
+                min={0}
+                value={defaultBuyIn || ''}
+                onChange={e => setDefaultBuyIn(Number(e.target.value) || 0)}
+                placeholder="e.g. 100"
+                className="input-chip w-28"
+              />
+            </div>
+          )}
+
           <PlayerTable
             phase={phase}
             cash={cash}
             setCash={setCash}
             onEdit={resetValidation}
+            defaultBuyIn={defaultBuyIn}
           />
 
           {/*  buttons row  */}

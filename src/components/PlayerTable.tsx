@@ -8,9 +8,10 @@ interface Props {
   cash: Record<string, string>;
   setCash: React.Dispatch<React.SetStateAction<Record<string, string>>>;
   onEdit: () => void;
+  defaultBuyIn: number;
 }
 
-export default function PlayerTable({ phase, cash, setCash, onEdit }: Props) {
+export default function PlayerTable({ phase, cash, setCash, onEdit, defaultBuyIn }: Props) {
   const { players, events, dispatch } = useGame();
   const [name, setName] = useState('');
 
@@ -92,7 +93,7 @@ export default function PlayerTable({ phase, cash, setCash, onEdit }: Props) {
                   />
                 </td>
                 <td className="py-2 px-4 flex items-center justify-center gap-2">
-                  <BuyButton playerId={p.id} disabled={phase !== 'play'} />
+                  <BuyButton playerId={p.id} disabled={phase !== 'play'} defaultAmount={defaultBuyIn} />
                   <button
                     disabled={phase !== 'play'}
                     onClick={() =>
