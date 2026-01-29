@@ -32,7 +32,13 @@ export default function PlayerTable({ phase, cash, setCash, onEdit, defaultBuyIn
         onSubmit={e => {
           e.preventDefault();
           if (phase !== 'play') return;
-          if (name.trim()) dispatch({ type: 'addPlayer', name: name.trim() });
+          const trimmed = name.trim();
+          if (!trimmed) return;
+          if (players.some(p => p.name.toLowerCase() === trimmed.toLowerCase())) {
+            alert(`Player "${trimmed}" already exists.`);
+            return;
+          }
+          dispatch({ type: 'addPlayer', name: trimmed });
           setName('');
         }}
       >
@@ -97,10 +103,11 @@ export default function PlayerTable({ phase, cash, setCash, onEdit, defaultBuyIn
                     <BuyButton playerId={p.id} disabled={phase !== 'play'} defaultAmount={defaultBuyIn} />
                     <button
                       disabled={phase !== 'play'}
-                      onClick={() =>
-                        phase === 'play' &&
-                        dispatch({ type: 'removePlayer', id: p.id })
-                      }
+                      onClick={() => {
+                        if (phase !== 'play') return;
+                        if (!window.confirm(`Delete ${p.name}? This will remove all their buy-ins.`)) return;
+                        dispatch({ type: 'removePlayer', id: p.id });
+                      }}
                       className={clsx(
                         'min-w-[32px] min-h-[32px] inline-flex items-center justify-center rounded text-xs text-neonPink hover:bg-white/10 transition-colors',
                         phase !== 'play' && 'cursor-not-allowed opacity-40',
