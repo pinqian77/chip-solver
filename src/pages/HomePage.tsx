@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Calculator, ArrowLeft } from 'lucide-react';
+import { Check, Calculator, ArrowLeft, RotateCcw } from 'lucide-react';
 import PlayerTable from '../components/PlayerTable';
 import EventLog from '../components/EventLog';
 import { useGame } from '../context/GameContext';
@@ -11,7 +11,7 @@ export default function HomePage() {
   /* -------- state -------- */
   const [phase, setPhase] = useState<'play' | 'settle' | 'done'>('play');
   const [defaultBuyIn, setDefaultBuyIn] = useState(0);
-  const { players, events } = useGame();
+  const { players, events, dispatch } = useGame();
   const [cash, setCash] = useState<Record<string, string>>(
     () => Object.fromEntries(players.map(p => [p.id, ''])),
   );
@@ -43,6 +43,17 @@ export default function HomePage() {
 
   /* -------- handlers -------- */
   const goSettle = () => setPhase('settle');
+
+  const newGame = () => {
+    if (!window.confirm('Start a new game? This will clear all players and buy-ins.')) return;
+    dispatch({ type: 'reset' });
+    setCash({});
+    setDefaultBuyIn(0);
+    setValidateOK(false);
+    setResult(null);
+    setError(null);
+    setPhase('play');
+  };
 
   const backToPlay = () => {
     setCash(Object.fromEntries(players.map(p => [p.id, ''])));
@@ -86,9 +97,12 @@ export default function HomePage() {
   /* -------- layout -------- */
   return (
     <div className="flex flex-col items-center gap-10 px-4 py-8 md:px-6 lg:px-8">
-<h1 className="font-orbitron text-4xl text-neonMagenta drop-shadow-neonPink text-center">
-  🃏 Chip Solver
-</h1>
+<div className="flex items-center gap-4">
+  <h1 className="font-orbitron text-4xl text-neonMagenta drop-shadow-neonPink text-center">
+    🃏 Chip Solver
+  </h1>
+  <NeonButton label="New Game" onClick={newGame} icon={<RotateCcw size={16} />} />
+</div>
 
       <motion.div
         layout

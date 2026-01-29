@@ -36,7 +36,8 @@ type Action =
   | { type: 'addPlayer'; name: string }
   | { type: 'removePlayer'; id: string }
   | { type: 'buyin'; playerId: string; amount: number }
-  | { type: 'removeEvent'; eventId: string };
+  | { type: 'removeEvent'; eventId: string }
+  | { type: 'reset' };
 
 const GameContext = createContext<
   (State & { dispatch: React.Dispatch<Action> }) | undefined
@@ -74,6 +75,8 @@ function reducer(state: State, action: Action): State {
         ...state,
         events: state.events.filter(e => e.id !== action.eventId),
       };
+    case 'reset':
+      return EMPTY_STATE;
     default:
       return state;
   }
