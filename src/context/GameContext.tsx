@@ -1,10 +1,35 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import type { Player, Event } from '../types/poker';
 import { nanoid } from 'nanoid';
 
 interface State {
   players: Player[];
   events: Event[];
+}
+
+const STORAGE_KEY = 'chip-solver-state';
+const EMPTY_STATE: State = { players: [], events: [] };
+
+function loadState(): State {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return EMPTY_STATE;
+    const parsed = JSON.parse(raw) as State;
+    if (!Array.isArray(parsed.players) || !Array.isArray(parsed.events)) {
+      return EMPTY_STATE;
+    }
+    return parsed;
+  } catch {
+    return EMPTY_STATE;
+  }
+}
+
+function saveState(state: State): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // localStorage unavailable (e.g. private browsing quota exceeded)
+  }
 }
 
 type Action =
@@ -57,7 +82,12 @@ function reducer(state: State, action: Action): State {
 export const GameProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const [state, dispatch] = useReducer(reducer, { players: [], events: [] });
+  const [state, dispatch] = useReducer(reducer, undefined, loadState);
+
+  useEffect(() => {
+    saveState(state);
+  }, [state]);
+
   return (
     <GameContext.Provider value={{ ...state, dispatch }}>
       {children}
